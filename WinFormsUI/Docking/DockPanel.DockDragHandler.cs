@@ -249,10 +249,9 @@ namespace WeifenLuo.WinFormsUI.Docking
             public DefaultDockOutline()
             {
                 m_dragForm = new DragForm();
-                SetDragForm(Rectangle.Empty);
+				DragForm.Bounds = Rectangle.Empty;
                 DragForm.BackColor = SystemColors.ActiveCaption;
                 DragForm.Opacity = 0.5;
-                DragForm.Show(false);
             }
 
             DragForm m_dragForm;
@@ -266,10 +265,14 @@ namespace WeifenLuo.WinFormsUI.Docking
                 CalculateRegion();
             }
 
-            protected override void OnClose()
+            protected override void OnHide()
             {
-                DragForm.Close();
+                DragForm.Visible = false;
             }
+
+			protected override void OnClose() {
+				DragForm.Close();
+			}
 
             private void CalculateRegion()
             {
@@ -370,6 +373,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             private void SetDragForm(Rectangle rect)
             {
+				DragForm.Show( false );
                 DragForm.Bounds = rect;
                 if (rect == Rectangle.Empty)
                 {
@@ -389,6 +393,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             private void SetDragForm(Rectangle rect, Region region)
             {
+				DragForm.Show( false );
                 DragForm.Bounds = rect;
                 DragForm.Region = region;
             }
@@ -623,6 +628,9 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                             region.Union(graphicsPath);
                         }
+						if ( !Visible) {
+							Show( false );
+						}
                     }
                     else
                         PaneDiamond.Visible = false;
@@ -659,10 +667,10 @@ namespace WeifenLuo.WinFormsUI.Docking
                     RefreshChanges();
                 }
 
-                public void TestDrop()
+                public void TestDrop(DockHelper.CursorPoint  info)
                 {
-                    Point pt = Control.MousePosition;
-                    DockPane = DockHelper.PaneAtPoint(pt, DockPanel);
+					Point pt = info.Cursor;
+					DockPane = info.Pane;
 
                     if (TestDrop(PanelLeft, pt) != DockStyle.None)
                         HitTestResult = PanelLeft;
@@ -738,7 +746,6 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 Outline = DockPanel.Extender.DockOutlineFactory.CreateDockOutline();
                 Indicator = new DockIndicator(this);
-                Indicator.Show(false);
 
                 FloatOutlineBounds = DragSource.BeginDrag(StartMousePosition);
             }
@@ -746,6 +753,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             protected override void OnDragging()
             {
                 TestDrop();
+				DragSource.OnDragging( Control.MousePosition );
             }
 
             protected override void OnEndDrag(bool abort)
@@ -773,41 +781,45 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 Indicator.FullPanelEdge = ((Control.ModifierKeys & Keys.Shift) != 0);
 
-                if ((Control.ModifierKeys & Keys.Control) == 0)
-                {
-                    Indicator.TestDrop();
+				DockHelper.CursorPoint cursorPointInfo = DockHelper.CursorPointInformation( DockPanel, DragSource );
 
-                    if (!Outline.FlagTestDrop)
-                    {
-                        DockPane pane = DockHelper.PaneAtPoint(Control.MousePosition, DockPanel);
-                        if (pane != null && DragSource.IsDockStateValid(pane.DockState))
-                            pane.TestDrop(DragSource, Outline);
-                    }
+				if ( ( Control.ModifierKeys & Keys.Control ) == 0 ) {
+					if ( Indicator.Visible == false ) {
+						// show indicator when the cursor comes into the dock panel area
+						if ( cursorPointInfo.DockPanel != null ) {
+							Indicator.Show( false );
+						}
+					}
 
-                    if (!Outline.FlagTestDrop && DragSource.IsDockStateValid(DockState.Float))
-                    {
-                        FloatWindow floatWindow = DockHelper.FloatWindowAtPoint(Control.MousePosition, DockPanel);
-                        if (floatWindow != null)
-                            floatWindow.TestDrop(DragSource, Outline);
-                    }
+					Indicator.TestDrop( cursorPointInfo );
+
+					if ( !Outline.FlagTestDrop ) {
+						if ( cursorPointInfo.Pane != null && DragSource.IsDockStateValid( cursorPointInfo.Pane.DockState ) )
+							cursorPointInfo.Pane.TestDrop( cursorPointInfo, Outline );
+					}
+
+					if ( !Outline.FlagTestDrop && DragSource.IsDockStateValid( DockState.Float ) ) {
+						if ( cursorPointInfo.FloatWindow != null )
+							cursorPointInfo.FloatWindow.TestDrop( cursorPointInfo, Outline );
+					}
+				} else
+					Indicator.DockPane = cursorPointInfo.Pane;
+
+                if (!Outline.FlagTestDrop) {
+					Rectangle rect = FloatOutlineBounds;
+					rect.Offset( Control.MousePosition.X - StartMousePosition.X, Control.MousePosition.Y - StartMousePosition.Y );
+
+					// do not show the outline when a user is moving a floating window
+					if ( !(DragSource is FloatWindow) && DragSource.IsDockStateValid( DockState.Float ) ) {
+						Outline.Show( rect, true );
+					} else {
+						Cursor.Current = Cursors.No;
+						Outline.Show( rect, false );
+					}
                 }
-                else
-                    Indicator.DockPane = DockHelper.PaneAtPoint(Control.MousePosition, DockPanel);
 
                 if (!Outline.FlagTestDrop)
                 {
-                    if (DragSource.IsDockStateValid(DockState.Float))
-                    {
-                        Rectangle rect = FloatOutlineBounds;
-                        rect.Offset(Control.MousePosition.X - StartMousePosition.X, Control.MousePosition.Y - StartMousePosition.Y);
-                        Outline.Show(rect);
-                    }
-                }
-
-                if (!Outline.FlagTestDrop)
-                {
-                    Cursor.Current = Cursors.No;
-                    Outline.Show();
                 }
                 else
                     Cursor.Current = DragControl.Cursor;

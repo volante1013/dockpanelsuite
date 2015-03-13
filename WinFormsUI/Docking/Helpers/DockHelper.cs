@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -72,6 +73,125 @@ namespace WeifenLuo.WinFormsUI.Docking
                 return state;
         }
 
+		public class CursorPoint {
+			public IDockDragSource DragSource;
+			public Point Cursor;
+			public DockPane Pane;
+			public DockPanel DockPanel;
+			public FloatWindow FloatWindow;
+
+			public override string ToString() {
+				string winText = "null";
+				if(FloatWindow != null) {
+								winText = FloatWindow.Text;
+				} else if ( DockPanel != null) {
+					winText = "DockPanel";
+				}
+				string paneText = "null";
+				if(Pane != null) {
+								paneText = Pane.CaptionText;
+				}
+				return "Cursor=[x=" + Cursor.X + "," + Cursor.Y + "],Window=" + winText + ",Pane=" + paneText;
+			}
+		}
+
+		private static bool ControlContains( Control control, Point point ) {
+			if ( control.Parent != null ) {
+				return control.Bounds.Contains( control.Parent.PointToClient( point ) );
+			}
+			return control.Bounds.Contains( point );
+		}
+
+		private static bool SearchChilds( Control window, CursorPoint info, DockPanel dockPanel ) {
+
+			// enumerate child controls at the cursor point
+			List<Control> childs = new List<Control>();
+			const uint CWP_SKIPDISABLED = 0x0002;
+			const uint CWP_SKIPINVISIBLE = 0x0001;
+			const uint CWP_SKIPTRANSPARENT = 0x0004;
+			uint flags = CWP_SKIPDISABLED | CWP_SKIPINVISIBLE | CWP_SKIPTRANSPARENT;
+
+			Control current = window;
+			while ( true ) {
+				childs.Add( current );
+				IntPtr hwnd = NativeMethods.ChildWindowFromPointEx( 
+					current.Handle, current.PointToClient( info.Cursor ), flags );
+				if ( hwnd == current.Handle || hwnd == IntPtr.Zero ) {
+					break;
+				}
+				current = Control.FromHandle( hwnd );
+				if ( current == null ) {
+					break;
+				}
+			}
+			
+			// make the array deepest first
+			childs.Reverse();
+
+			bool targetFound = false;
+			foreach ( Control control in childs ) {
+				if ( info.Pane == null ) { // not found?
+					IDockContent content = control as IDockContent;
+					if ( content != null && content.DockHandler.DockPanel == dockPanel ) {
+						info.Pane = content.DockHandler.Pane;
+						targetFound = true;
+					}
+
+					DockPane pane = control as DockPane;
+					if ( pane != null && pane.DockPanel == dockPanel ) {
+						info.Pane = pane;
+						targetFound = true;
+					}
+				}
+
+				if ( info.FloatWindow == null && info.DockPanel == null ) { // not found?
+					FloatWindow floatWindow = window as FloatWindow;
+					if ( floatWindow != null && floatWindow.DockPanel == dockPanel ) {
+						info.FloatWindow = floatWindow;
+						targetFound = true;
+					}
+
+					DockPanel panel = control as DockPanel;
+					if ( panel != null && panel == dockPanel ) {
+						info.DockPanel = panel;
+						targetFound = true;
+					}
+				}
+			}
+
+			return targetFound;
+		}
+
+		public static CursorPoint CursorPointInformation( DockPanel dockPanel, IDockDragSource dragSource ) {
+			FloatWindow sourceFloatWindow = dragSource as FloatWindow;
+			CursorPoint info = new CursorPoint();
+			info.DragSource = dragSource;
+			info.Cursor = Control.MousePosition;
+
+			// find the window beneath the cursor
+			int currentProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
+			NativeMethods.EnumWindows( ( hWnd, arg ) => {
+				uint processId;
+				NativeMethods.GetWindowThreadProcessId( hWnd, out processId );
+				if ( processId == currentProcessId ) {
+					if ( sourceFloatWindow != null && sourceFloatWindow.Handle == hWnd ) {
+						// ignore the source floating window
+						return true;
+					}
+					Control window = Control.FromHandle( hWnd );
+					if ( window != null && window.Visible && ControlContains(window, info.Cursor)) {
+						// look into child controls
+						if ( SearchChilds( window, info, dockPanel ) ) {
+							return false;
+						}
+					}
+				}
+				return true;
+			}, IntPtr.Zero );
+
+			return info;
+		}
+		/*
         public static DockPane PaneAtPoint(Point pt, DockPanel dockPanel)
         {
             if (!Win32Helper.IsRunningOnMono)
@@ -101,5 +221,6 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             return null;
         }
+		*/
     }
 }

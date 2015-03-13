@@ -56,6 +56,17 @@ namespace WeifenLuo.WinFormsUI.Docking
         public static extern int UnhookWindowsHookEx(IntPtr hhook);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr CallNextHookEx(IntPtr hhook, int code, IntPtr wParam, IntPtr lParam);
+		public static extern IntPtr CallNextHookEx( IntPtr hhook, int code, IntPtr wParam, IntPtr lParam );
+
+		public delegate bool EnumWindowsDelegate( IntPtr hWnd, IntPtr lparam );
+
+		[DllImport( "user32.dll" )]
+		public extern static bool EnumWindows( EnumWindowsDelegate lpEnumFunc, IntPtr lparam );
+
+		[DllImport( "user32.dll" )]
+		public static extern uint GetWindowThreadProcessId( IntPtr hWnd, out uint lpdwProcessId );
+
+		[DllImport( "user32.dll" )]
+		public static extern IntPtr ChildWindowFromPointEx( IntPtr hWndParent, Point point, uint uFlags );
     }
 }

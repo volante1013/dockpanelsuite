@@ -53,7 +53,6 @@ namespace WeifenLuo.WinFormsUI.Docking
                     SetDragForm(Rectangle.Empty);
                     DragForm.BackColor = Color.FromArgb(0xff, 91, 173, 255);
                     DragForm.Opacity = 0.5;
-                    DragForm.Show(false);
                 }
 
                 DragForm m_dragForm;
@@ -65,6 +64,11 @@ namespace WeifenLuo.WinFormsUI.Docking
                 protected override void OnShow()
                 {
                     CalculateRegion();
+                }
+
+                protected override void OnHide()
+                {
+					DragForm.Visible = false;
                 }
 
                 protected override void OnClose()
@@ -172,6 +176,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 private void SetDragForm(Rectangle rect)
                 {
+				    DragForm.Show( false );
                     DragForm.Bounds = rect;
                     if (rect == Rectangle.Empty)
                     {
@@ -191,6 +196,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 private void SetDragForm(Rectangle rect, Region region)
                 {
+				    DragForm.Show( false );
                     DragForm.Bounds = rect;
                     if (DragForm.Region != null)
                     {

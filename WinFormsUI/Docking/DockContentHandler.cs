@@ -1075,6 +1075,9 @@ namespace WeifenLuo.WinFormsUI.Docking
             return new Rectangle(location, size);
         }
 
+		void IDockDragSource.OnDragging( Point ptMouse ) {
+		}
+
         void IDockDragSource.EndDrag()
         { 
         }

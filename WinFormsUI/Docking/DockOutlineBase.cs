@@ -98,6 +98,8 @@ namespace WeifenLuo.WinFormsUI.Docking
 
         protected abstract void OnShow();
 
+        protected abstract void OnHide();
+
         protected abstract void OnClose();
 
         private void SetValues(Rectangle floatWindowBounds, Control dockTo, DockStyle dock, int contentIndex)
@@ -117,14 +119,14 @@ namespace WeifenLuo.WinFormsUI.Docking
                 m_contentIndex != m_oldContentIndex)
                 OnShow();
         }
-
+		/*
         public void Show()
         {
             SaveOldValues();
             SetValues(Rectangle.Empty, null, DockStyle.None, -1);
             TestChange();
         }
-
+		*/
         public void Show(DockPane pane, DockStyle dock)
         {
             SaveOldValues();
@@ -146,12 +148,20 @@ namespace WeifenLuo.WinFormsUI.Docking
             TestChange();
         }
 
-        public void Show(Rectangle floatWindowBounds)
+        public void Show(Rectangle floatWindowBounds, bool visible)
         {
             SaveOldValues();
             SetValues(floatWindowBounds, null, DockStyle.None, -1);
-            TestChange();
+			if ( visible ) {
+				TestChange();
+			} else {
+				OnHide();
+			}
         }
+
+		public void Hide() {
+			OnHide();
+		}
 
         public void Close()
         {

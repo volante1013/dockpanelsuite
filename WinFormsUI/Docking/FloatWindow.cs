@@ -314,15 +314,15 @@ namespace WeifenLuo.WinFormsUI.Docking
             get	{	return ClientRectangle;	}
         }
 
-        internal void TestDrop(IDockDragSource dragSource, DockOutlineBase dockOutline)
+		internal void TestDrop( DockHelper.CursorPoint info, DockOutlineBase dockOutline )
         {
             if (VisibleNestedPanes.Count == 1)
             {
                 DockPane pane = VisibleNestedPanes[0];
-                if (!dragSource.CanDockTo(pane))
+				if ( !info.DragSource.CanDockTo( pane ) )
                     return;
 
-                Point ptMouse = Control.MousePosition;
+				Point ptMouse = info.Cursor;
                 uint lParam = Win32Helper.MakeLong(ptMouse.X, ptMouse.Y);
                 if (!Win32Helper.IsRunningOnMono)
                 {
@@ -362,15 +362,25 @@ namespace WeifenLuo.WinFormsUI.Docking
         }
 
         private int m_preDragExStyle;
+		private Point m_preDragPosition;
+		private Point m_dragStartPoint;
 
         Rectangle IDockDragSource.BeginDrag(Point ptMouse)
         {
+			m_preDragPosition = Location;
+			m_dragStartPoint = ptMouse;
             m_preDragExStyle = NativeMethods.GetWindowLong(this.Handle, (int)Win32.GetWindowLongIndex.GWL_EXSTYLE);
             NativeMethods.SetWindowLong(this.Handle, 
                                         (int)Win32.GetWindowLongIndex.GWL_EXSTYLE,
                                         m_preDragExStyle | (int)(Win32.WindowExStyles.WS_EX_TRANSPARENT | Win32.WindowExStyles.WS_EX_LAYERED) );
             return Bounds;
         }
+
+		void IDockDragSource.OnDragging( Point ptMouse ) {
+			Location = new Point(
+				m_preDragPosition.X + ( ptMouse.X - m_dragStartPoint.X ),
+				m_preDragPosition.Y + ( ptMouse.Y - m_dragStartPoint.Y ) );
+		}
 
         void IDockDragSource.EndDrag()
         {
