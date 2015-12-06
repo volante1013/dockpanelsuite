@@ -172,6 +172,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 private void SetDragForm(Rectangle rect)
                 {
+					DragForm.Show(false);
                     DragForm.Bounds = rect;
                     if (rect == Rectangle.Empty)
                     {
@@ -191,6 +192,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 private void SetDragForm(Rectangle rect, Region region)
                 {
+					DragForm.Show(false);
                     DragForm.Bounds = rect;
                     if (DragForm.Region != null)
                     {
@@ -199,7 +201,13 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                     DragForm.Region = region;
                 }
-            }
+
+
+				protected override void OnHide()
+				{
+					DragForm.Visible = false;
+				}
+			}
         }
 
         private class VS2013BluePanelIndicatorFactory : DockPanelExtender.IPanelIndicatorFactory
