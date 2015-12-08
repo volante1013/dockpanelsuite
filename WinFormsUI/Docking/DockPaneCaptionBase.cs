@@ -54,6 +54,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             if (e.Button == MouseButtons.Left &&
                 DockPane.DockPanel.AllowEndUserDocking &&
+				DockPane.DockPanel.AllowChangeLayout &&
                 DockPane.AllowDockDragAndDrop &&
                 !DockHelper.IsDockStateAutoHide(DockPane.DockState) &&
                 DockPane.ActiveContent != null)

@@ -30,7 +30,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             m_nestedPanes = new NestedPaneCollection(this);
 
-            FormBorderStyle = FormBorderStyle.SizableToolWindow;
+			AllowChangeLayout = dockPanel.AllowChangeLayout;
             ShowInTaskbar = false;
             if (dockPanel.RightToLeft != RightToLeft)
                 RightToLeft = dockPanel.RightToLeft;
@@ -82,6 +82,18 @@ namespace WeifenLuo.WinFormsUI.Docking
             get { return m_doubleClickTitleBarToDock; }
             set { m_doubleClickTitleBarToDock = value; }
         }
+
+		private bool m_allowChangeLayout = true;
+		public bool AllowChangeLayout {
+			get { return m_allowChangeLayout; }
+			set {
+				if ( m_allowChangeLayout == value )
+					return;
+
+				m_allowChangeLayout = value;
+				FormBorderStyle = m_allowChangeLayout ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
+			}
+		}
 
         public NestedPaneCollection NestedPanes
         {
@@ -190,7 +202,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                             return;
 
                         uint result = Win32Helper.IsRunningOnMono ? 0 : NativeMethods.SendMessage(this.Handle, (int)Win32.Msgs.WM_NCHITTEST, 0, (uint)m.LParam);
-                        if (result == 2 && DockPanel.AllowEndUserDocking && this.AllowEndUserDocking)	// HITTEST_CAPTION
+                        if (result == 2 && DockPanel.AllowEndUserDocking && DockPanel.AllowChangeLayout && this.AllowEndUserDocking)	// HITTEST_CAPTION
                         {
                             Activate();
                             m_dockPanel.BeginDrag(this);
@@ -217,6 +229,9 @@ namespace WeifenLuo.WinFormsUI.Docking
                         return;
                     }
                 case (int)Win32.Msgs.WM_CLOSE:
+					if ( !m_dockPanel.AllowChangeLayout )
+						return;
+
                     if (NestedPanes.Count == 0)
                     {
                         base.WndProc(ref m);

@@ -217,6 +217,24 @@ namespace WeifenLuo.WinFormsUI.Docking
             }
         }
 
+		private bool m_allowChangeLayout = true;
+		[LocalizedCategory( "Category_Docking" )]
+		[LocalizedDescription( "DockPanel_AllowChangeLayout_Description" )]
+		[DefaultValue( true )]
+		public bool AllowChangeLayout {
+			get {
+				return m_allowChangeLayout;
+			}
+			set {
+				if ( m_allowChangeLayout == value )
+					return;
+
+				m_allowChangeLayout = value;
+				foreach ( FloatWindow floatWindow in FloatWindows )
+					floatWindow.AllowChangeLayout = value;
+			}
+		}
+
         private DockContentCollection m_contents = new DockContentCollection();
         [Browsable(false)]
         public DockContentCollection Contents

@@ -217,7 +217,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             if (DockPane.ActiveContent == null)
                 return;
 
-            if (DockPane.DockPanel.AllowEndUserDocking && DockPane.AllowDockDragAndDrop && DockPane.ActiveContent.DockHandler.AllowEndUserDocking)
+            if (DockPane.DockPanel.AllowEndUserDocking && DockPane.DockPanel.AllowChangeLayout && DockPane.AllowDockDragAndDrop && DockPane.ActiveContent.DockHandler.AllowEndUserDocking)
                 DockPane.DockPanel.BeginDrag(DockPane.ActiveContent.DockHandler);
         }
 
@@ -247,7 +247,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                 base.WndProc(ref m);
 
                 int index = HitTest();
-                if (DockPane.DockPanel.AllowEndUserDocking && index != -1)
+                if (DockPane.DockPanel.AllowEndUserDocking && DockPane.DockPanel.AllowChangeLayout && index != -1)
                 {
                     IDockContent content = Tabs[index].Content;
                     if (content.DockHandler.CheckDockState(!content.DockHandler.IsFloat) != DockState.Unknown)

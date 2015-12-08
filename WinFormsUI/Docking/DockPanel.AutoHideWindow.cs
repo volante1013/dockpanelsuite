@@ -102,6 +102,9 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 protected override void StartDrag()
                 {
+					if ( !m_autoHideWindow.m_dockPanel.AllowChangeLayout )
+						return;
+
                     AutoHideWindow.DockPanel.BeginDrag(AutoHideWindow, AutoHideWindow.RectangleToScreen(Bounds));
                 }
             }

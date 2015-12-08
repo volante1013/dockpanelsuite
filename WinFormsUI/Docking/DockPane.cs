@@ -504,6 +504,9 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             DockPanel dockPanel = DockPanel;
 
+			if ( !dockPanel.AllowChangeLayout )
+				return;
+
             dockPanel.SuspendLayout(true);
 
             try
