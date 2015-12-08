@@ -289,6 +289,10 @@ namespace WeifenLuo.WinFormsUI.Docking
 
                 m_showDocumentIcon = value;
                 Refresh();
+
+				foreach ( FloatWindow floatWindow in FloatWindows ) {
+					floatWindow.Refresh();
+				}
             }
         }
 

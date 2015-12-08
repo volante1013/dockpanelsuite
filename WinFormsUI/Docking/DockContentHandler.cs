@@ -711,6 +711,11 @@ namespace WeifenLuo.WinFormsUI.Docking
                     return;
 
                 DockPanel.ContentFocusManager.Activate(Content);
+
+
+				if ( Pane.IsFloat )
+					Pane.FloatWindow.SetText();
+
             }
         }
 

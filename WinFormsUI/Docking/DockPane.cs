@@ -474,6 +474,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                 DockPanel.ActiveAutoHideContent = ActiveContent;
             else if (!IsActivated && ActiveContent != null)
                 ActiveContent.DockHandler.Activate();
+			//System.Diagnostics.Debug.WriteLine( "Activated: " + this.CaptionText );
         }
 
         internal void AddContent(IDockContent content)
