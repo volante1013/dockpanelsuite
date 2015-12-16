@@ -72,6 +72,9 @@ namespace WeifenLuo.WinFormsUI.Docking
                     return;
                 }
 
+				if ( !DockPane.DockPanel.AllowChangeLayout )
+					return;
+
                 if (DockPane.IsFloat)
                     DockPane.RestoreToPanel();
                 else

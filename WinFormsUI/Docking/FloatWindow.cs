@@ -164,24 +164,24 @@ namespace WeifenLuo.WinFormsUI.Docking
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
         internal void SetText()
         {
-			DockPane theOnlyPane = null;
+			DockPane activePane = null;
 
 			foreach ( var pane in VisibleNestedPanes ) {
 				if ( pane.IsActivated ) {
-					theOnlyPane = pane;
+					activePane = pane;
 					break;
 				}
 			}
 
-            if (theOnlyPane == null || theOnlyPane.ActiveContent == null)
+			if ( activePane == null || activePane.ActiveContent == null )
             {
                 Text = " ";	// use " " instead of string.Empty because the whole title bar will disappear when ControlBox is set to false.
                 Icon = null;
             }
             else
             {
-                Text = theOnlyPane.ActiveContent.DockHandler.TabText;
-                Icon = theOnlyPane.ActiveContent.DockHandler.Icon;
+				Text = activePane.ActiveContent.DockHandler.TabText;
+				Icon = activePane.ActiveContent.DockHandler.Icon;
             }
         }
 
@@ -265,7 +265,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                     return;
                 case (int)Win32.Msgs.WM_NCLBUTTONDBLCLK:
                     {
-                        uint result = !DoubleClickTitleBarToDock || Win32Helper.IsRunningOnMono 
+                        uint result = !DoubleClickTitleBarToDock || !DockPanel.AllowChangeLayout || Win32Helper.IsRunningOnMono 
                             ? 0
                             : NativeMethods.SendMessage(this.Handle, (int)Win32.Msgs.WM_NCHITTEST, 0, (uint)m.LParam);
 

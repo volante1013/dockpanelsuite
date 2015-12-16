@@ -25,14 +25,14 @@ namespace DockSample {
 		public CustomFloatWindow( DockPanel dockPanel, DockPane pane )
 			: base( dockPanel, pane ) {
 
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+			//FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
 			DoubleClickTitleBarToDock = false;
 		}
 
 		public CustomFloatWindow( DockPanel dockPanel, DockPane pane, Rectangle bounds )
 			: base( dockPanel, pane, bounds ) {
 
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+			//FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
 			DoubleClickTitleBarToDock = false;
 		}
 
