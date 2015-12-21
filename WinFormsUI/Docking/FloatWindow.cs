@@ -173,6 +173,9 @@ namespace WeifenLuo.WinFormsUI.Docking
 				}
 			}
 
+			if ( activePane == null )
+				activePane = VisibleNestedPanes.Count > 0 ? VisibleNestedPanes[0] : null;
+
 			if ( activePane == null || activePane.ActiveContent == null )
             {
                 Text = " ";	// use " " instead of string.Empty because the whole title bar will disappear when ControlBox is set to false.
