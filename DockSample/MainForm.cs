@@ -629,5 +629,10 @@ namespace DockSample
 			menuItemAllowChangeLayout.Checked = dockPanel.AllowChangeLayout = !dockPanel.AllowChangeLayout;
 			FormBorderStyle = dockPanel.AllowChangeLayout ? FormBorderStyle.Sizable : FormBorderStyle.FixedSingle;
 		}
+
+		private void canCloseFloatWindowInLockToolStripMenuItem_Click( object sender, EventArgs e ) {
+
+			canCloseFloatWindowInLockToolStripMenuItem.Checked = dockPanel.CanCloseFloatWindowInLock = !dockPanel.CanCloseFloatWindowInLock;
+		}
     }
 }

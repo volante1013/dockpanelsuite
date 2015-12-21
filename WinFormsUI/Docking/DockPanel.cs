@@ -235,6 +235,23 @@ namespace WeifenLuo.WinFormsUI.Docking
 			}
 		}
 
+		// :(
+		private bool m_canCloseFloatWindowInLock = false;
+		[LocalizedCategory( "Category_Docking" )]
+		[LocalizedDescription( "DockPanel_CanCloseFloatWindowInLock_Description" )]
+		[DefaultValue( false )]
+		public bool CanCloseFloatWindowInLock {
+			get {
+				return m_canCloseFloatWindowInLock;
+			}
+			set {
+				if ( m_canCloseFloatWindowInLock == value )
+					return;
+
+				m_canCloseFloatWindowInLock = value;
+			}
+		}
+
         private DockContentCollection m_contents = new DockContentCollection();
         [Browsable(false)]
         public DockContentCollection Contents

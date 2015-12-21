@@ -66,6 +66,8 @@ namespace DockSample
 			this.menuItemSystemMdi = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.showRightToLeft = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.menuItemAllowChangeLayout = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemNewWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,8 +89,7 @@ namespace DockSample
 			this.toolBarButtonDockPanelSkinDemo = new System.Windows.Forms.ToolStripButton();
 			this.topBar = new System.Windows.Forms.Panel();
 			this.bottomBar = new System.Windows.Forms.Panel();
-			this.menuItemAllowChangeLayout = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.canCloseFloatWindowInLockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.vS2005Theme1 = new WeifenLuo.WinFormsUI.Docking.VS2005Theme();
 			this.vS2003Theme1 = new WeifenLuo.WinFormsUI.Docking.VS2003Theme();
@@ -298,7 +299,8 @@ namespace DockSample
             this.menuItem5,
             this.showRightToLeft,
             this.toolStripSeparator1,
-            this.menuItemAllowChangeLayout});
+            this.menuItemAllowChangeLayout,
+            this.canCloseFloatWindowInLockToolStripMenuItem});
 			this.menuItemTools.MergeIndex = 2;
 			this.menuItemTools.Name = "menuItemTools";
 			this.menuItemTools.Size = new System.Drawing.Size(49, 20);
@@ -401,6 +403,20 @@ namespace DockSample
 			this.showRightToLeft.Text = "Show &Right-To-Left";
 			this.showRightToLeft.Click += new System.EventHandler(this.showRightToLeft_Click);
 			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(270, 6);
+			// 
+			// menuItemAllowChangeLayout
+			// 
+			this.menuItemAllowChangeLayout.Checked = true;
+			this.menuItemAllowChangeLayout.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.menuItemAllowChangeLayout.Name = "menuItemAllowChangeLayout";
+			this.menuItemAllowChangeLayout.Size = new System.Drawing.Size(273, 22);
+			this.menuItemAllowChangeLayout.Text = "&AllowChangeLayout";
+			this.menuItemAllowChangeLayout.Click += new System.EventHandler(this.menuItemAllowChangeLayout_Click);
+			// 
 			// menuItemWindow
 			// 
 			this.menuItemWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -413,7 +429,7 @@ namespace DockSample
 			// menuItemNewWindow
 			// 
 			this.menuItemNewWindow.Name = "menuItemNewWindow";
-			this.menuItemNewWindow.Size = new System.Drawing.Size(150, 22);
+			this.menuItemNewWindow.Size = new System.Drawing.Size(152, 22);
 			this.menuItemNewWindow.Text = "&New Window";
 			this.menuItemNewWindow.Click += new System.EventHandler(this.menuItemNewWindow_Click);
 			// 
@@ -578,19 +594,12 @@ namespace DockSample
 			this.bottomBar.TabIndex = 10;
 			this.bottomBar.Visible = false;
 			// 
-			// menuItemAllowChangeLayout
+			// canCloseFloatWindowInLockToolStripMenuItem
 			// 
-			this.menuItemAllowChangeLayout.Checked = true;
-			this.menuItemAllowChangeLayout.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.menuItemAllowChangeLayout.Name = "menuItemAllowChangeLayout";
-			this.menuItemAllowChangeLayout.Size = new System.Drawing.Size(273, 22);
-			this.menuItemAllowChangeLayout.Text = "&AllowChangeLayout";
-			this.menuItemAllowChangeLayout.Click += new System.EventHandler(this.menuItemAllowChangeLayout_Click);
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(270, 6);
+			this.canCloseFloatWindowInLockToolStripMenuItem.Name = "canCloseFloatWindowInLockToolStripMenuItem";
+			this.canCloseFloatWindowInLockToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+			this.canCloseFloatWindowInLockToolStripMenuItem.Text = "CanCloseFloatWindowInLock";
+			this.canCloseFloatWindowInLockToolStripMenuItem.Click += new System.EventHandler(this.canCloseFloatWindowInLockToolStripMenuItem_Click);
 			// 
 			// dockPanel
 			// 
@@ -706,5 +715,6 @@ namespace DockSample
         private System.Windows.Forms.Panel bottomBar;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem menuItemAllowChangeLayout;
+		private System.Windows.Forms.ToolStripMenuItem canCloseFloatWindowInLockToolStripMenuItem;
     }
 }

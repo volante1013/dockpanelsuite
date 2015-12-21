@@ -239,7 +239,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                         return;
                     }
                 case (int)Win32.Msgs.WM_CLOSE:
-					if ( !m_dockPanel.AllowChangeLayout )
+					if ( !m_dockPanel.AllowChangeLayout && !m_dockPanel.CanCloseFloatWindowInLock )
 						return;
 
                     if (NestedPanes.Count == 0)
