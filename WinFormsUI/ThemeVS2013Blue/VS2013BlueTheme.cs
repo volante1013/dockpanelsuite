@@ -461,7 +461,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
         public static DockPanelSkin CreateVisualStudio2013Blue()
         {
-            var border      = Color.FromArgb(0xFF, 41, 57, 85);
+			var border = Color.FromArgb(0xFF, 64, 64, 64);
             var specialyellow = Color.FromArgb(0xFF, 255, 242, 157);
             var hover = Color.FromArgb(0xFF, 155, 167, 183);
 
@@ -496,10 +496,10 @@ namespace WeifenLuo.WinFormsUI.Docking
             skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.EndColor = border;
             skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.TextColor = Color.White;
 
-            skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.StartColor = specialyellow;
-            skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.EndColor = specialyellow;
+            skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.StartColor = lostFocusTab;
+            skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.EndColor = lostFocusTab;
             //skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.LinearGradientMode = LinearGradientMode.Vertical;
-            skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.TextColor = Color.Black;
+            skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.TextColor = Color.White;
 
             skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.StartColor = lostFocusTab;
             skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.EndColor = lostFocusTab;

@@ -360,6 +360,20 @@ namespace WeifenLuo.WinFormsUI.Docking
             rectCaptionText.Y += TextGapTop;
             rectCaptionText.Height -= TextGapTop + TextGapBottom;
 
+
+            if (DockPane.ActiveContent != null)
+            {
+                var icon = DockPane.ActiveContent.DockHandler.Icon;
+                if (icon != null && DockPane.DockPanel.ShowDocumentIcon)
+                {
+                    int offset = (rectCaption.Height - 16) / 2;
+                    g.DrawIcon(icon, new Rectangle(offset, offset, 16, 16));
+                    rectCaptionText.X += 16 + offset;
+                    rectCaptionText.Width -= 16 + offset;
+                }
+            }
+
+
             Color colorText;
             if (DockPane.IsActivated)
                 colorText = DockPane.DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.TextColor;
