@@ -529,6 +529,8 @@ namespace WeifenLuo.WinFormsUI.Docking
                 DockWindow window = Parent as DockWindow;
                 if (window == null)
                     return;
+                if (!window.DockPanel.AllowChangeLayout)
+                    return;
 
                 window.DockPanel.BeginDrag(window, window.RectangleToScreen(Bounds));
             }
