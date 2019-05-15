@@ -1267,6 +1267,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                 ToolStripItem item = SelectMenu.Items.Add(content.DockHandler.TabText, content.DockHandler.Icon.ToBitmap());
                 item.Tag = tab.Content;
                 item.Click += new EventHandler(ContextMenuItem_Click);
+                item.ForeColor = Color.White;
             }
 
             var workingArea = Screen.GetWorkingArea(ButtonWindowList.PointToScreen(new Point(ButtonWindowList.Width / 2, ButtonWindowList.Height / 2)));
