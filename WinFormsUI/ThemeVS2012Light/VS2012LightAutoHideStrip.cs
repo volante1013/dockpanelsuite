@@ -209,7 +209,7 @@ namespace WeifenLuo.WinFormsUI.Docking
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.FillRectangle(SystemBrushes.Control, ClientRectangle);
+            g.FillRectangle(new SolidBrush(Color.FromArgb(64, 64, 64)), ClientRectangle);
             DrawTabStrip(g);
         }
 
@@ -384,9 +384,10 @@ namespace WeifenLuo.WinFormsUI.Docking
             rectText.Width -= ImageGapLeft + imageWidth + ImageGapRight + TextGapLeft;
             rectText = RtlTransform(GetTransformedRectangle(dockState, rectText), dockState);
 
-            if (DockPanel.ActiveContent == content || tab.IsMouseOver)
-                textColor = DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.ActiveTabGradient.TextColor;
-            else
+            // AutoHideTabはTabがアクティブかどうかにかかわらず背景色が一緒であるので、TextColorを変える必要がないため色を変えない
+            //if (DockPanel.ActiveContent == content || tab.IsMouseOver)
+            //    textColor = DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.ActiveTabGradient.TextColor;
+            //else
                 textColor = DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.TextColor;
 
             if (dockState == DockState.DockLeftAutoHide || dockState == DockState.DockRightAutoHide)
